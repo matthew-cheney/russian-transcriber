@@ -1,0 +1,138 @@
+$consonants = [шртпщсдфгчклжзхцвбнм] ;
+$paired_consonants = [пбфвмтдсзнлр] ;
+$velars = [кгх] ;
+$vowels = [ёяеыуиоюэа] ;
+$ak_vowels = [ао] ;
+$ik_vowels = [яаеё] ;
+$obstruents = [пбфвтдсзжшкг] ;
+$voiceless_obstruents = [пфтсшк] ;
+$voiced_obstruents = [бвдзжг] ;
+$labials = [пбфвм] ;
+$dentals = [тдсзцнлр] ;
+$palatals = [шжчй] ;
+$back_palatals = [кгх] ;
+
+// Initial softening of consonants
+$russ_pron = "" -> \' / ($paired_consonants | $velars) _ ([ёяеиюь])
+
+_o_
+
+// ь,ъ to alt. tokens
+ь -> ""
+_o_
+ъ -> ""
+
+_o_
+
+// Vowels to base forms
+\'я -> \'а
+_o_
+я -> йа
+_o_
+\'е -> \'э
+_o_
+е -> йэ
+_o_
+\'ю -> \'у
+_o_
+ю -> йу
+_o_
+\'ё\, -> \'o\,
+_o_
+\'ё -> \'o\,
+_o_
+ё\, -> йo\,
+_o_
+ё -> йo\,
+
+_o_
+
+// Softness assimilation
+"" -> \' / $labials _ $labials \'
+_o_
+"" -> \' / $dentals _ $dentals \'
+_o_
+"" -> \' / $palatals _ $palatals \'
+_o_
+"" -> \' / $back_palatals _ $back_palatals \'
+
+_o_
+
+// Tense e
+е\, -> э\^ / _ (($paired_consonants | $velars
+)\,)
+
+_o_
+
+// Yeri
+и -> ы / ([жшц]) _
+
+_o_
+
+// Akanje
+$ak_vowels -> ʌ / # _ ([^\'])
+_o_
+$ak_vowels -> ʌ / ($consonants) _ ($consonants ($consonants | \')*  $vowels \,)
+_o_
+$ak_vowels -> ъ / _ ([^\,] | #)
+
+_o_
+
+// Ikanje
+$ik_vowels -> и / ($consonants \') _ ($consonants | \')* $vowels \,
+_o_
+$ik_vowels -> ь / ($consonants \') _ ([^\,])
+
+_o_
+
+// Ykanje
+е -> ы / ([жшц]) _ ($consonants | \')* $vowels \,
+_o_
+е -> ъ / ([жшц]) _ ([^\,])
+
+_o_
+
+// Final devoicing
+б -> п / _ #
+_o_
+в -> ф / _ #
+_o_
+д -> т / _ #
+_o_
+з -> с / _ #
+_o_
+ж -> ш / _ #
+_o_
+г -> к / _ #
+
+_o_
+
+// Voicing assimilation
+б -> п / _ (\' | "") $voiceless_obstruents
+_o_
+в -> ф / _ (\' | "") $voiceless_obstruents
+_o_
+д -> т / _ (\' | "") $voiceless_obstruents
+_o_
+з -> с / _ (\' | "") $voiceless_obstruents
+_o_
+ж -> ш / _ (\' | "") $voiceless_obstruents
+_o_
+г -> к / _ (\' | "") $voiceless_obstruents
+
+_o_
+
+п -> б / _ (\' | "") $voiced_obstruents
+_o_
+ф -> в / _ (\' | "") $voiced_obstruents
+_o_
+т -> д / _ (\' | "") $voiced_obstruents
+_o_
+с -> з / _ (\' | "") $voiced_obstruents
+_o_
+ш -> ж / _ (\' | "") $voiced_obstruents
+_o_
+к -> г / _ (\' | "") $voiced_obstruents
+
+
+;
